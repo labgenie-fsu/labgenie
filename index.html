@@ -5,20 +5,6 @@
   Florida State University, School of Information
 =============================================================================
 
-  SOURCE OF TRUTH
-  ---------------
-  All study details come from LabGenie UX Testing Protocol V4.0 (21 Jul 2026).
-  NOT the 2025 flyer, which describes the old 2-hour in-person workshops.
-  V4 sessions are remote, one-on-one, 60 minutes, on Zoom.
-
-  >>> DO NOT PUBLISH UNTIL RESOLVED <<<
-    1. IRB approval for THIS protocol (submitted 23 Jul 2026, FSU IRB meeting
-       12 Aug 2026). STUDY00004785 covers the OLD protocol, not this one.
-       The IRB line in the footer is commented out on purpose.
-    2. Compensation amount (2025 flyer said $50 Amazon; V4 doesn't state one).
-       (masthead, hero, mid-page band, footer).
-  Search for "TODO".
-
   FILES REQUIRED IN THE REPO
   --------------------------
     index.html
@@ -56,9 +42,6 @@
 <style>
   /* ==========================================================================
      TOKENS
-     Palette taken from the LabGenie logo so web and print match.
-     Type is sans-only (Archivo headings / Public Sans body), intentionally
-     unlike the ALCOVE site's serif editorial styling.
      ========================================================================== */
   :root{
     --ink:#0E2136;
@@ -88,7 +71,7 @@
   }
 
   /* ==========================================================================
-     BASE:  body text is deliberately large; audience is 65+. Don't shrink.
+     BASE:  body text is deliberately large; audience is 65+.
      ========================================================================== */
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -104,7 +87,7 @@
   .wrap{width:min(76rem,calc(100% - 3rem));margin-inline:auto}
 
   /* ==========================================================================
-     SIGN-UP BUTTON: most important element on the page. Min 56px tall.
+     SIGN-UP BUTTON
      ========================================================================== */
   .cta{display:inline-flex;align-items:center;justify-content:center;gap:.65rem;
     background:var(--blue);color:#fff;text-decoration:none;
@@ -225,7 +208,6 @@
      Flips the same card between raw portal output and LabGenie's version.
      A direct swap in one space makes the contrast land harder than two
      panels side by side, and it gives people something to click at a table.
-     Without JavaScript the LabGenie view simply stays visible.
      ========================================================================== */
   .switch{display:inline-flex;padding:3px;background:rgba(255,255,255,.12);border-radius:4px;gap:2px}
   .switch button{appearance:none;border:0;cursor:pointer;background:transparent;color:#A9C2DB;
@@ -262,7 +244,6 @@
   /* ==========================================================================
      RAIL SECTIONS
      Two columns: sticky label on the left, content on the right.
-     This is the main structural difference from the ALCOVE site.
      ========================================================================== */
   .band{padding:4.25rem 0;border-bottom:1px solid var(--line)}
   .band-wash{background:var(--wash)}
@@ -494,13 +475,7 @@
       </div>
     </div>
 
-    <!-- SIGNATURE ELEMENT: a LabGenie result card with two views.
-         "Your portal" shows the raw output someone actually receives.
-         "LabGenie" shows the same result explained. The toggle swaps them in
-         place, which makes the contrast sharper than two panels side by side.
-         Severity scale mirrors the prototype: Low / Normal / High / Very High.
-         Values are illustrative only. Band widths and marker position are
-         inline percentages so they can be tuned without touching the CSS. -->
+    <!-- SIGNATURE ELEMENT: a LabGenie result card with two views. -->
     <div>
       <div class="card">
         <div class="card-bar">
@@ -567,7 +542,7 @@
 
 
 <!-- ==========================================================================
-     WHAT'S INVOLVED: all values from Protocol V4 (remote, 1-on-1, 60 min)
+     WHAT'S INVOLVED
      ========================================================================== -->
 <section class="band band-wash" id="involved">
   <div class="wrap rail">
@@ -591,8 +566,6 @@
 
 <!-- ==========================================================================
      WHO CAN JOIN
-     ⚠ Inclusion/exclusion criteria come straight from Protocol V4 and must
-     match the IRB-approved protocol exactly. Don't edit without checking.
      ========================================================================== -->
 <section class="band" id="eligibility">
   <div class="wrap rail">
@@ -669,7 +642,7 @@
 
 
 <!-- ==========================================================================
-     THE SESSION: mirrors the session flow in Protocol V4
+     THE SESSION
      ========================================================================== -->
 <section class="band" id="session">
   <div class="wrap rail">
@@ -723,7 +696,6 @@
 
 <!-- ==========================================================================
      TEAM:  from the existing LabGenie project site
-     TODO: confirm whether to show the full roster or link to the existing page
      ========================================================================== -->
 <section class="band" id="team">
   <div class="wrap rail">
@@ -810,9 +782,6 @@
 
 <!-- ==========================================================================
      QUESTIONS
-     ⚠ These answers make public commitments about what participants will and
-     won't be asked to do. Each must match the approved protocol and consent
-     form. Clear changes with Dr. He.
      ========================================================================== -->
 <section class="band" id="questions">
   <div class="wrap rail">
@@ -857,7 +826,6 @@
 
 <!-- ==========================================================================
      CONTACT: institutional contacts only.
-     Phone number is the study line printed on the 2025 flyer.
      ========================================================================== -->
 <section class="band band-wash" id="contact">
   <div class="wrap rail">
@@ -881,13 +849,6 @@
 
 <!-- ==========================================================================
      FOOTER
-     ⚠ TODO: IRB LINE, intentionally commented out. Protocol V4 was submitted
-     23 Jul 2026; FSU IRB meets 12 Aug 2026. Do NOT claim approval for this
-     protocol until granted, and use the study ID covering THIS protocol.
-     STUDY00004785 covered the previous in-person workshop protocol.
-
-       <p>This study has been approved by the Florida State University
-          Institutional Review Board (Study ID: TODO).</p>
      ========================================================================== -->
 <footer>
   <div class="wrap">
@@ -904,9 +865,7 @@
 </footer>
 
 
-<!-- ==========================================================================
-     JAVASCRIPT: decorative and progressive. Page works fully without it.
-     ========================================================================== -->
+
 <script>
 (function(){
 
