@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<!--
+=============================================================================
+  LabGenie: Public Project & Recruitment Website
+  Florida State University, School of Information
+=============================================================================
+
+  SOURCE OF TRUTH
+  ---------------
+  All study details come from LabGenie UX Testing Protocol V4.0 (21 Jul 2026).
+  NOT the 2025 flyer, which describes the old 2-hour in-person workshops.
+  V4 sessions are remote, one-on-one, 60 minutes, on Zoom.
+
+  >>> DO NOT PUBLISH UNTIL RESOLVED <<<
+    1. IRB approval for THIS protocol (submitted 23 Jul 2026, FSU IRB meeting
+       12 Aug 2026). STUDY00004785 covers the OLD protocol, not this one.
+       The IRB line in the footer is commented out on purpose.
+    2. Compensation amount (2025 flyer said $50 Amazon; V4 doesn't state one).
+       (masthead, hero, mid-page band, footer).
+  Search for "TODO".
+
+  FILES REQUIRED IN THE REPO
+  --------------------------
+    index.html
+    assets/labgenie-icon.png            masthead + footer mark
+    assets/labgenie-wordmark.png        masthead wordmark (dark version)
+    assets/labgenie-wordmark-light.png  footer wordmark (light, for dark bg)
+    assets/favicon.png
+
+  LAYOUT NOTE
+  -----------
+  This site uses a two-column rail layout: a sticky label in the left column,
+  content in the right. Deliberately different from the ALCOVE site's centered
+  stacked bands so the two projects don't look like the same template.
+  The rail and the hero both collapse to a single column below 66rem.
+
+=============================================================================
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>LabGenie: Help Us Make Lab Results Easier to Understand | Florida State University</title>
+<meta name="description" content="LabGenie is a research project at Florida State University building a tool that helps older adults understand their lab test results. Join a one-hour online session and help shape it.">
+<meta property="og:title" content="LabGenie: Help Us Make Lab Results Easier to Understand">
+<meta property="og:description" content="A one-hour online session from home. Help shape a tool that makes lab test results easier to understand. Florida State University.">
+<meta property="og:type" content="website">
+<!-- TODO: add og:image (1200x630) -->
+<link rel="icon" href="assets/favicon.png" type="image/png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ==========================================================================
+     TOKENS
+     Palette taken from the LabGenie logo so web and print match.
+     Type is sans-only (Archivo headings / Public Sans body), intentionally
+     unlike the ALCOVE site's serif editorial styling.
+     ========================================================================== */
+  :root{
+    --ink:#0E2136;
+    --ink-mid:#3E556F;
+    --ink-soft:#6E8298;
+    --paper:#FFFFFF;
+    --wash:#F3F7FC;
+    --line:#DCE6F1;
+    --line-soft:#EBF1F8;
+
+    --blue:#1878C8;          /* logo mid blue */
+    --blue-deep:#12588F;
+    --blue-ink:#1D4B8F;      /* logo deep blue */
+    --blue-wash:#E8F3FD;
+
+    /* Result severity colors, matched to the LabGenie prototype */
+    --sev-low:#D2334E;
+    --sev-normal:#3E9A4B;
+    --sev-high:#F4D06F;
+    --sev-vhigh:#D2334E;
+
+    --rail:13rem;
+    --measure:36rem;
+    --head:"Archivo",system-ui,sans-serif;
+    --body:"Public Sans",system-ui,-apple-system,sans-serif;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+
+  /* ==========================================================================
+     BASE:  body text is deliberately large; audience is 65+. Don't shrink.
+     ========================================================================== */
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--body);font-size:1.15rem;line-height:1.62;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:var(--blue-deep);text-underline-offset:.2em}
+  a:focus-visible,button:focus-visible,summary:focus-visible{
+    outline:3px solid var(--blue);outline-offset:3px;border-radius:3px}
+  .skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:#fff;
+    padding:.75rem 1.25rem;z-index:200}
+  .skip:focus{left:0}
+  .wrap{width:min(76rem,calc(100% - 3rem));margin-inline:auto}
+
+  /* ==========================================================================
+     SIGN-UP BUTTON: most important element on the page. Min 56px tall.
+     ========================================================================== */
+  .cta{display:inline-flex;align-items:center;justify-content:center;gap:.65rem;
+    background:var(--blue);color:#fff;text-decoration:none;
+    font-family:var(--head);font-size:1.1rem;font-weight:600;letter-spacing:-.005em;
+    padding:1rem 1.9rem;border-radius:3px;border:2px solid var(--blue);min-height:56px;
+    transition:background .2s var(--ease),border-color .2s var(--ease),box-shadow .2s var(--ease)}
+  .cta:hover{background:var(--blue-deep);border-color:var(--blue-deep);
+    box-shadow:0 6px 20px -8px rgba(24,120,200,.7)}
+  .cta svg{width:1.05em;height:1.05em;flex:none}
+  .cta-sm{font-size:1rem;padding:.6rem 1.1rem;min-height:44px}
+  .cta-light{background:#fff;color:var(--blue-deep);border-color:#fff}
+  .cta-light:hover{background:var(--blue-wash);border-color:var(--blue-wash)}
+
+  /* ==========================================================================
+     MASTHEAD
+     ========================================================================== */
+  .masthead{border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100;
+    background:rgba(255,255,255,.95);backdrop-filter:saturate(160%) blur(10px)}
+  .masthead .wrap{display:flex;align-items:center;justify-content:space-between;
+    gap:1.5rem;padding:.7rem 0}
+  .brand{display:flex;align-items:center;gap:.55rem;text-decoration:none}
+  .brand img.mark{height:34px;width:auto;display:block}
+  .brand img.word{height:21px;width:auto;display:block}
+  .nav-right{display:flex;align-items:center;gap:1.6rem;flex-wrap:wrap}
+  .nav{display:flex;gap:1.4rem;flex-wrap:wrap}
+  .nav a{font-family:var(--head);font-size:.95rem;font-weight:500;text-decoration:none;
+    color:var(--ink-soft);padding:.3rem 0;border-bottom:2px solid transparent;
+    transition:color .2s var(--ease),border-color .2s var(--ease)}
+  .nav a:hover,.nav a.active{color:var(--blue-deep);border-bottom-color:var(--blue)}
+  @media(max-width:66rem){
+    /* Static here, so the blur would cost paint work for no visual gain */
+    .masthead{position:static;background:var(--paper);backdrop-filter:none}
+    .masthead .wrap{flex-direction:column;align-items:flex-start;gap:.7rem}
+    .nav-right{width:100%;justify-content:space-between;gap:1rem}
+    .nav{gap:1rem}
+  }
+
+  /* ==========================================================================
+     HERO
+     ========================================================================== */
+  .hero{padding:4.5rem 0 3.5rem;border-bottom:1px solid var(--line)}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:4rem;align-items:center}
+  .tag{display:inline-block;font-family:var(--head);font-size:.78rem;font-weight:600;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--blue-deep);
+    background:var(--blue-wash);padding:.4rem .8rem;border-radius:3px;margin:0 0 1.5rem}
+  h1{font-family:var(--head);font-weight:700;
+    font-size:clamp(2.2rem,4.4vw,3.5rem);line-height:1.08;letter-spacing:-.028em;
+    margin:0 0 1.35rem;max-width:16ch}
+  h1 em{font-style:normal;color:var(--blue)}
+  .standfirst{font-size:1.22rem;color:var(--ink-mid);max-width:44ch;margin:0 0 1.9rem}
+
+  /* At-a-glance facts: the questions someone asks in the first ten seconds */
+  .glance{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 2rem;padding:0;list-style:none}
+  .glance li{display:inline-flex;align-items:center;gap:.45rem;white-space:nowrap;
+    background:var(--paper);border:1px solid var(--line);color:var(--ink);
+    font-family:var(--head);font-size:.95rem;font-weight:500;
+    padding:.45rem .85rem;border-radius:3px}
+  .glance svg{width:1.05em;height:1.05em;flex:none;color:var(--blue)}
+  .hero-actions{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
+  .hero-note{font-size:.98rem;color:var(--ink-soft);margin:0;max-width:24ch}
+
+  /* ==========================================================================
+     RESULT CARD: the signature element.
+     Mirrors the real LabGenie prototype: a severity scale with Low / Normal /
+     High / Very High bands and a marker showing where the result falls.
+     ========================================================================== */
+  .card{border:1px solid var(--line);border-radius:6px;overflow:hidden;
+    box-shadow:0 20px 50px -34px rgba(14,33,54,.55)}
+  .card-bar{background:var(--ink);color:#fff;padding:.7rem 1.15rem;
+    display:flex;align-items:center;justify-content:space-between;gap:1rem}
+  .card-bar b{font-family:var(--head);font-size:.9rem;font-weight:600;letter-spacing:.02em}
+  .card-body{padding:1.5rem 1.4rem}
+  .res-name{font-family:var(--head);font-size:1.02rem;font-weight:600;
+    letter-spacing:.02em;color:var(--ink-soft);text-transform:uppercase;margin:0 0 .15rem}
+  .res-plain{font-family:var(--head);font-size:1.35rem;font-weight:600;
+    letter-spacing:-.02em;margin:0 0 .9rem;line-height:1.25}
+  .res-expl{font-size:1rem;color:var(--ink-mid);margin:0 0 1.6rem}
+
+  /* --- Severity scale --- */
+  .scale{margin:0 0 1.5rem}
+  .scale-head{text-align:center;margin:0 0 .3rem}
+  .scale-head span{display:block;font-size:.85rem;color:var(--ink-soft)}
+  .scale-head b{font-family:var(--head);font-size:1.15rem;font-weight:700;letter-spacing:-.01em}
+  .scale-pin{position:relative;height:.55rem}
+  .scale-pin i{position:absolute;top:0;transform:translateX(-50%);
+    width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;
+    border-top:8px solid var(--ink)}
+  .scale-track{display:flex;height:22px;border-radius:11px;overflow:hidden}
+  .scale-track span{display:block;height:100%}
+  .scale-labels{display:flex;margin-top:.4rem}
+  .scale-labels span{font-family:var(--head);font-size:.82rem;font-weight:600;
+    text-align:center;line-height:1.2;padding:0 2px}
+  @media(max-width:34rem){
+    /* Narrow bands can't hold this text at full size; shrink and allow wrap */
+    .scale-labels span{font-size:.68rem;letter-spacing:-.01em}
+    .scale-nums i{font-size:.72rem}
+  }
+  /* Boundary numbers sit under the joins between bands */
+  .scale-nums{position:relative;height:1.15rem;margin-top:.1rem}
+  .scale-nums i{position:absolute;transform:translateX(-50%);
+    font-size:.8rem;color:var(--ink-soft);font-style:normal;font-variant-numeric:tabular-nums}
+
+  .res-ask{background:var(--blue-wash);border-left:3px solid var(--blue);padding:.95rem 1.1rem}
+  .res-ask b{display:block;font-family:var(--head);font-size:.75rem;font-weight:600;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--blue-deep);margin-bottom:.4rem}
+  .res-ask p{margin:0;font-size:1rem}
+
+  .card-note{font-size:.85rem;color:var(--ink-soft);margin:.8rem 0 0;text-align:center}
+
+  /* Below 66rem the hero stacks: copy first, result card underneath. */
+  @media(max-width:66rem){
+    .hero{padding:2.5rem 0 2.5rem}
+    .hero-grid{grid-template-columns:1fr;gap:2.5rem}
+  }
+
+  /* ==========================================================================
+     CARD VIEW TOGGLE
+     Flips the same card between raw portal output and LabGenie's version.
+     A direct swap in one space makes the contrast land harder than two
+     panels side by side, and it gives people something to click at a table.
+     Without JavaScript the LabGenie view simply stays visible.
+     ========================================================================== */
+  .switch{display:inline-flex;padding:3px;background:rgba(255,255,255,.12);border-radius:4px;gap:2px}
+  .switch button{appearance:none;border:0;cursor:pointer;background:transparent;color:#A9C2DB;
+    font-family:var(--head);font-size:.82rem;font-weight:600;letter-spacing:.02em;
+    padding:.35rem .75rem;border-radius:3px;transition:background .2s var(--ease),color .2s var(--ease)}
+  .switch button[aria-selected="true"]{background:#fff;color:var(--ink)}
+  .switch button:hover:not([aria-selected="true"]){color:#fff}
+
+  /* On phones the title and toggle can't share a row. Stack them and turn the
+     toggle into a full-width segmented control with 44px tap targets. */
+  @media(max-width:34rem){
+    .card-bar{flex-wrap:wrap;gap:.6rem;padding:.75rem .9rem}
+    .switch{width:100%}
+    .switch button{flex:1;padding:.55rem .5rem;min-height:40px}
+    .card-body{padding:1.25rem 1.05rem}
+  }
+
+  .view[hidden]{display:none}
+
+  /* Raw portal view: deliberately styled like a clinical data table */
+  .portal-rows{border:1px solid var(--line);border-radius:4px;overflow:hidden;margin:0 0 1.1rem}
+  .portal-rows div{display:flex;justify-content:space-between;gap:1rem;
+    padding:.7rem .9rem;border-bottom:1px solid var(--line-soft);
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92rem}
+  .portal-rows div:last-child{border-bottom:none}
+  .portal-rows div:nth-child(odd){background:var(--wash)}
+  .portal-rows dt{margin:0;color:var(--ink-soft)}
+  .portal-rows dd{margin:0;font-weight:600}
+  .flag{color:var(--sev-low);font-weight:700}
+  .portal-quote{margin:0;padding:.95rem 1.1rem;background:var(--wash);
+    border-left:3px solid var(--line);font-style:italic;color:var(--ink-mid);font-size:1rem}
+
+
+  /* ==========================================================================
+     RAIL SECTIONS
+     Two columns: sticky label on the left, content on the right.
+     This is the main structural difference from the ALCOVE site.
+     ========================================================================== */
+  .band{padding:4.25rem 0;border-bottom:1px solid var(--line)}
+  .band-wash{background:var(--wash)}
+  .band-ink{background:var(--ink);color:#DCE7F3;border-bottom:none}
+  .band-ink h2{color:#fff}
+  .band-ink p{color:#A9BDD4}
+  .band-ink .rail-label{color:#7FB4E6;border-color:rgba(255,255,255,.25)}
+
+  .rail{display:grid;grid-template-columns:var(--rail) 1fr;gap:3.5rem;align-items:start}
+  .rail-label{position:sticky;top:5.5rem;
+    font-family:var(--head);font-size:.8rem;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--blue-deep);
+    border-top:2px solid var(--blue);padding-top:.75rem;margin:.4rem 0 0}
+  @media(max-width:66rem){
+    .rail{grid-template-columns:1fr;gap:1.25rem}
+    .rail-label{position:static;top:auto}
+  }
+
+  h2{font-family:var(--head);font-weight:700;
+    font-size:clamp(1.7rem,3vw,2.35rem);line-height:1.16;letter-spacing:-.025em;
+    margin:0 0 1.2rem;max-width:22ch}
+  h3{font-family:var(--head);font-weight:600;font-size:1.2rem;letter-spacing:-.012em;
+    line-height:1.3;margin:0 0 .4rem}
+  p{margin:0 0 1.1rem;max-width:var(--measure)}
+  .lede{font-size:1.2rem;color:var(--ink-mid)}
+
+  /* ==========================================================================
+     SESSION FACT TABLE  (replaces ALCOVE-style hover cards)
+     ========================================================================== */
+  .spec{border:1px solid var(--line);border-radius:6px;background:var(--paper);
+    margin-top:2rem;overflow:hidden}
+  .spec div{display:grid;grid-template-columns:11rem 1fr;gap:1.5rem;
+    padding:1.05rem 1.35rem;border-bottom:1px solid var(--line-soft)}
+  .spec div:last-child{border-bottom:none}
+  .spec dt{font-family:var(--head);font-size:.85rem;font-weight:600;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--ink-soft);margin:.15rem 0 0}
+  .spec dd{margin:0;font-family:var(--head);font-size:1.1rem;font-weight:600;letter-spacing:-.015em}
+  .spec dd small{display:block;font-family:var(--body);font-size:.98rem;font-weight:400;
+    color:var(--ink-mid);margin-top:.15rem;letter-spacing:0}
+  @media(max-width:34rem){
+    .spec div{grid-template-columns:1fr;gap:.25rem}
+  }
+
+  /* ==========================================================================
+     ELIGIBILITY
+     ========================================================================== */
+  .checks{list-style:none;margin:1.75rem 0 0;padding:0;display:grid;gap:1rem}
+  .checks li{display:grid;grid-template-columns:1.75rem 1fr;gap:.85rem;align-items:start;
+    font-size:1.08rem;min-width:0}
+  .checks svg{width:1.35rem;height:1.35rem;color:var(--sev-normal);margin-top:.2rem}
+  .checks-x svg{color:var(--ink-soft)}
+  .checks > li > span{min-width:0}   /* lets the chip row use full width */
+
+  /* Condition chips.
+     FIX: chips were collapsing into tall narrow ovals because they were
+     shrinking as flex items. flex:0 0 auto + white-space:nowrap keeps each
+     one on a single line; the row wraps instead of the text. */
+  .conds{display:flex;flex-wrap:wrap;gap:.45rem;margin:.75rem 0 0;padding:0;list-style:none}
+  .conds li{display:block;flex:0 0 auto;white-space:nowrap;
+    background:var(--paper);border:1px solid var(--line);color:var(--ink-mid);
+    font-size:.95rem;line-height:1.4;padding:.35rem .8rem;border-radius:3px}
+  @media(max-width:30rem){
+    /* On very narrow screens allow wrapping rather than horizontal overflow */
+    .conds li{white-space:normal}
+  }
+
+  .subhead{font-family:var(--head);font-size:.8rem;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink-soft);margin:2.5rem 0 0}
+
+  /* ==========================================================================
+     MID-PAGE CTA
+     ========================================================================== */
+  .cta-band .rail{align-items:center}
+  .cta-band h2{max-width:18ch}
+  .cta-band .cta{margin-top:1.25rem}
+
+  /* ==========================================================================
+     SESSION WALKTHROUGH: timeline with a connecting line
+     ========================================================================== */
+  .flow{margin-top:2rem;padding:0;list-style:none;position:relative}
+  .flow::before{content:"";position:absolute;left:.62rem;top:.9rem;bottom:.9rem;
+    width:2px;background:var(--line)}
+  .flow li{position:relative;padding:0 0 1.9rem 2.6rem}
+  .flow li:last-child{padding-bottom:0}
+  .flow li::before{content:"";position:absolute;left:0;top:.5rem;width:1.25rem;height:1.25rem;
+    border-radius:50%;background:var(--paper);border:2px solid var(--blue)}
+  .flow li::after{content:"";position:absolute;left:.37rem;top:.87rem;width:.5rem;height:.5rem;
+    border-radius:50%;background:var(--blue)}
+  .flow p{margin:0;font-size:1.02rem;color:var(--ink-mid)}
+
+  /* ==========================================================================
+     TEAM
+     ========================================================================== */
+  .group + .group{margin-top:2.25rem}
+  .group-label{font-family:var(--head);font-size:.78rem;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink-soft);margin:0 0 1rem;
+    padding-bottom:.5rem;border-bottom:1px solid var(--line)}
+  .people{list-style:none;margin:0;padding:0;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1.4rem 2.25rem}
+  .people li{max-width:26rem}
+  .p-name{font-family:var(--head);font-size:1.08rem;font-weight:600;letter-spacing:-.012em;display:block}
+  .p-role{display:block;font-size:.82rem;font-weight:600;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--blue-deep);margin:.15rem 0 .25rem}
+  .p-affil{display:block;font-size:.96rem;color:var(--ink-mid);line-height:1.45}
+
+  /* ==========================================================================
+     FUNDING
+     ========================================================================== */
+  .grants{list-style:none;margin:1.75rem 0 0;padding:0;display:grid;gap:0;
+    border-top:1px solid var(--line)}
+  .grants li{padding:1.35rem 0;border-bottom:1px solid var(--line)}
+  .grants h3{font-size:1.08rem;margin:0 0 .35rem;max-width:48ch}
+  .grants p{margin:0;font-size:.96rem;color:var(--ink-mid);max-width:54ch}
+  .grants em{font-style:normal;color:var(--ink-soft);font-size:.9rem;
+    display:block;margin-top:.25rem}
+  .partner-line{margin-top:1.75rem;font-size:1rem;color:var(--ink-mid)}
+
+  /* ==========================================================================
+     FAQ: plus/minus, flush left, no numbering (unlike the ALCOVE site)
+     ========================================================================== */
+  .faq{margin-top:1.5rem;border-top:1px solid var(--line)}
+  .faq details{border-bottom:1px solid var(--line)}
+  .faq summary{list-style:none;cursor:pointer;padding:1.35rem 2.75rem 1.35rem 0;
+    position:relative;font-family:var(--head);font-size:1.15rem;font-weight:600;
+    letter-spacing:-.015em;line-height:1.35;transition:color .2s var(--ease)}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::before,.faq summary::after{content:"";position:absolute;right:.4rem;
+    background:var(--blue);transition:transform .3s var(--ease),opacity .3s var(--ease)}
+  .faq summary::before{top:2.05rem;width:15px;height:2px}
+  .faq summary::after{top:2.05rem;right:.4rem;left:auto;width:15px;height:2px;
+    transform:rotate(90deg)}
+  .faq details[open] summary::after{transform:rotate(0);opacity:0}
+  .faq summary:hover{color:var(--blue-deep)}
+  .faq-body{padding:0 2.75rem 1.4rem 0}
+  .faq-body p{font-size:1.02rem;color:var(--ink-mid);margin:0;max-width:44rem}
+
+  /* ==========================================================================
+     CONTACT
+     ========================================================================== */
+  .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));
+    gap:2rem;margin-top:.5rem}
+  .contact-grid h3{font-size:1.02rem}
+  .contact-grid p{font-size:1rem;color:var(--ink-mid);margin:0}
+
+  /* ==========================================================================
+     FOOTER
+     ========================================================================== */
+  footer{background:var(--ink);color:#D6E1EE;padding:3.25rem 0 2.25rem}
+  footer p{color:#A2B3C9;font-size:.96rem;max-width:54rem}
+  footer a{color:#fff}
+  .foot-top{display:flex;justify-content:space-between;align-items:center;gap:2rem;
+    flex-wrap:wrap;padding-bottom:1.9rem;margin-bottom:1.9rem;
+    border-bottom:1px solid rgba(255,255,255,.16)}
+  .foot-brand{display:flex;align-items:center;gap:.6rem}
+  .foot-brand img.mark{height:38px;width:auto}
+  .foot-brand img.word{height:22px;width:auto}
+  .colophon{margin-top:1.5rem;font-size:.86rem;color:#7B8DA6}
+
+  /* ==========================================================================
+     REVEAL + REDUCED MOTION
+     ========================================================================== */
+  .rise{opacity:0;transform:translateY(16px);
+    transition:opacity .6s var(--ease),transform .6s var(--ease)}
+  .rise.in{opacity:1;transform:none}
+  @media(max-width:66rem){
+    /* Shorter, shallower reveal so content settles before you scroll past it */
+    .rise{transform:translateY(10px);
+      transition:opacity .35s var(--ease),transform .35s var(--ease)}
+  }
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .rise{opacity:1!important;transform:none!important;transition:none!important}
+    *{transition-duration:.01ms!important}
+  }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to main content</a>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="LabGenie home">
+      <img class="mark" src="assets/labgenie-icon.png" alt="">
+      <img class="word" src="assets/labgenie-wordmark.png" alt="LabGenie">
+    </a>
+    <div class="nav-right">
+      <nav class="nav" aria-label="Sections">
+        <a href="#involved">What's involved</a>
+        <a href="#eligibility">Who can join</a>
+        <a href="#session">The session</a>
+        <a href="#project">The project</a>
+        <a href="#team">Team</a>
+        <a href="#funding">Funding</a>
+        <a href="#questions">Questions</a>
+      </nav>
+      <a class="cta cta-sm" href="https://fsu.qualtrics.com/jfe/form/SV_dakGUlBBSWSIS0e">Sign up</a>
+    </div>
+  </div>
+</header>
+
+
+<main id="main">
+
+<!-- ==========================================================================
+     HERO
+     ========================================================================== -->
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="tag">Florida State University &middot; Research study</p>
+      <h1>Your lab results shouldn't need a <em>translator</em>.</h1>
+      <p class="standfirst">LabGenie explains lab test results in plain language and helps you walk into your next appointment knowing what to ask. We're looking for adults 65 and older to try it and tell us what needs fixing.</p>
+
+      <ul class="glance">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>One hour</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg>Online, from home</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>One-on-one</li>
+        <!-- TODO: replace with the approved incentive amount -->
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 11h20M7 15h3"/></svg>Gift card</li>
+      </ul>
+
+      <div class="hero-actions">
+        <a class="cta" href="https://fsu.qualtrics.com/jfe/form/SV_dakGUlBBSWSIS0e">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          Sign up to take part
+        </a>
+        <p class="hero-note">About two minutes. Signing up doesn't commit you to anything.</p>
+      </div>
+    </div>
+
+    <!-- SIGNATURE ELEMENT: a LabGenie result card with two views.
+         "Your portal" shows the raw output someone actually receives.
+         "LabGenie" shows the same result explained. The toggle swaps them in
+         place, which makes the contrast sharper than two panels side by side.
+         Severity scale mirrors the prototype: Low / Normal / High / Very High.
+         Values are illustrative only. Band widths and marker position are
+         inline percentages so they can be tuned without touching the CSS. -->
+    <div>
+      <div class="card">
+        <div class="card-bar">
+          <b>Thyroid panel &middot; TSH</b>
+          <div class="switch" role="tablist" aria-label="Choose how the result is shown">
+            <button type="button" role="tab" id="tab-portal" aria-controls="view-portal" aria-selected="false">Your portal</button>
+            <button type="button" role="tab" id="tab-genie"  aria-controls="view-genie"  aria-selected="true">LabGenie</button>
+          </div>
+        </div>
+
+        <!-- VIEW 1 raw portal output -->
+        <div class="card-body view" id="view-portal" role="tabpanel" aria-labelledby="tab-portal" hidden>
+          <dl class="portal-rows">
+            <div><dt>TSH</dt><dd>7.0 <span class="flag">H</span></dd></div>
+            <div><dt>Reference range</dt><dd>0.40&ndash;4.50 mIU/L</dd></div>
+            <div><dt>Collected</dt><dd>03/14/26 08:22</dd></div>
+            <div><dt>Status</dt><dd>FINAL</dd></div>
+          </dl>
+          <p class="portal-quote">&ldquo;It says H. Is that bad? Do I need to call somebody, or does it wait until my appointment?&rdquo;</p>
+        </div>
+
+        <!-- VIEW 2 the same result, explained -->
+        <div class="card-body view" id="view-genie" role="tabpanel" aria-labelledby="tab-genie">
+          <p class="res-name">TSH</p>
+          <p class="res-plain">Your TSH is higher than the usual range</p>
+          <p class="res-expl">TSH is a hormone that tells your thyroid how hard to work. When the thyroid is underactive, TSH often runs high.</p>
+
+          <div class="scale">
+            <div class="scale-head">
+              <span>Your result</span>
+              <b>7.0 mIU/L</b>
+            </div>
+            <!-- Marker sits at 61%, where 7.0 falls in the High band -->
+            <div class="scale-pin"><i style="left:61%"></i></div>
+            <div class="scale-track" role="img" aria-label="A result of 7.0 milli-international units per litre falls in the High band. Normal is 0.4 to 4.5.">
+              <span style="width:8%;background:var(--sev-low)"></span>
+              <span style="width:34%;background:var(--sev-normal)"></span>
+              <span style="width:42%;background:var(--sev-high)"></span>
+              <span style="width:16%;background:var(--sev-vhigh)"></span>
+            </div>
+            <div class="scale-labels" aria-hidden="true">
+              <span style="width:8%;color:var(--sev-low)">Low</span>
+              <span style="width:34%;color:var(--sev-normal)">Normal</span>
+              <span style="width:42%;color:var(--blue-ink)">High</span>
+              <span style="width:16%;color:var(--sev-vhigh)">Very high</span>
+            </div>
+            <div class="scale-nums" aria-hidden="true">
+              <i style="left:8%">0.4</i>
+              <i style="left:42%">4.5</i>
+              <i style="left:84%">10</i>
+            </div>
+          </div>
+
+          <div class="res-ask">
+            <b>A question you could ask your doctor</b>
+            <p>&ldquo;My TSH is 7.0. Does my thyroid medication need adjusting, and when should we check it again?&rdquo;</p>
+          </div>
+        </div>
+      </div>
+      <p class="card-note">Example only. Sessions use made-up results, never your own.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     WHAT'S INVOLVED: all values from Protocol V4 (remote, 1-on-1, 60 min)
+     ========================================================================== -->
+<section class="band band-wash" id="involved">
+  <div class="wrap rail">
+    <p class="rail-label">What's involved</p>
+    <div>
+      <h2>One hour, from your own kitchen table.</h2>
+      <p class="lede">You'll meet one of our researchers on a video call and try the tool while telling us what you think of it.</p>
+      <p>There's nothing to prepare and nothing to study. You'll look at a sample set of lab results, poke around, and say out loud what makes sense and what doesn't. If something confuses you, that's the most useful thing you can tell us, because it means we have something to fix.</p>
+
+      <dl class="spec">
+        <div><dt>How long</dt><dd>60 minutes<small>A single session, start to finish</small></dd></div>
+        <div><dt>Where</dt><dd>Online, on Zoom<small>From home, on your own computer or tablet</small></dd></div>
+        <div><dt>Who's there</dt><dd>Just you and us<small>One researcher, plus a note-taker in the background</small></dd></div>
+        <!-- TODO: confirm approved incentive amount, then replace "Gift card" -->
+        <div><dt>Thank-you gift</dt><dd>Gift card<small>Sent after you complete the session</small></dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     WHO CAN JOIN
+     ⚠ Inclusion/exclusion criteria come straight from Protocol V4 and must
+     match the IRB-approved protocol exactly. Don't edit without checking.
+     ========================================================================== -->
+<section class="band" id="eligibility">
+  <div class="wrap rail">
+    <p class="rail-label">Who can join</p>
+    <div>
+      <h2>You can take part if&hellip;</h2>
+
+      <ul class="checks">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>You are <strong>65 or older</strong></span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>
+            You live with <strong>two or more</strong> of these conditions:
+            <ul class="conds">
+              <li>Hypothyroidism</li>
+              <li>Hyperthyroidism</li>
+              <li>Diabetes (Type 1 or 2)</li>
+              <li>Chronic kidney disease</li>
+              <li>High blood pressure</li>
+              <li>High cholesterol</li>
+              <li>Anemia</li>
+              <li>Heart disease</li>
+            </ul>
+          </span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>You've had <strong>at least one lab test</strong> in the past six months or so</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>You have a <strong>laptop, desktop, or tablet with a working camera and microphone</strong>, and can join a one-hour video call</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <span>You speak English</span>
+        </li>
+      </ul>
+
+      <p class="subhead">This study isn't a fit if&hellip;</p>
+      <ul class="checks checks-x">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+          <span>You currently work in healthcare, because we're looking for the patient's point of view</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+          <span>You're already taking part in another study about health technology</span>
+        </li>
+      </ul>
+
+      <p style="margin-top:1.75rem;color:var(--ink-mid)">Not sure whether you qualify? Sign up anyway and we'll let you know.</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="band band-ink cta-band">
+  <div class="wrap rail">
+    <p class="rail-label">Take part</p>
+    <div>
+      <h2>Ready to help?</h2>
+      <p>Fill out a short form and we'll be in touch about scheduling. Signing up doesn't commit you to anything, and you can change your mind at any point.</p>
+      <a class="cta cta-light" href="https://fsu.qualtrics.com/jfe/form/SV_dakGUlBBSWSIS0e">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        Sign up to take part
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     THE SESSION: mirrors the session flow in Protocol V4
+     ========================================================================== -->
+<section class="band" id="session">
+  <div class="wrap rail">
+    <p class="rail-label">The session</p>
+    <div>
+      <h2>What actually happens in the hour</h2>
+
+      <ol class="flow">
+        <li>
+          <h3>We say hello and explain everything</h3>
+          <p>We go over what we're doing and answer your questions before anything starts. With your permission we record the session so we don't miss anything. It is used only by our research team and is never shared publicly.</p>
+        </li>
+        <li>
+          <h3>A short warm-up</h3>
+          <p>We'll ask you to open a website you use often and talk through what you're looking at. It's practice for the main part, where we ask you to think out loud.</p>
+        </li>
+        <li>
+          <h3>You step into someone else's shoes</h3>
+          <p>We'll ask you to imagine you're a patient named James or Mary, who has a thyroid condition and has just had lab work done. The results are made up for this study. You'll never be asked about your own results.</p>
+        </li>
+        <li>
+          <h3>You try the tool and say what you think</h3>
+          <p>You'll look around the dashboard, find the results, try the chat assistant, and look up past tests, narrating as you go. We stay mostly quiet. There are no right answers and nothing is graded.</p>
+        </li>
+        <li>
+          <h3>A few questions to finish</h3>
+          <p>A short questionnaire and a conversation about what worked, what didn't, and the one thing you'd change. Then we're done.</p>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     THE PROJECT
+     ========================================================================== -->
+<section class="band band-wash" id="project">
+  <div class="wrap rail">
+    <p class="rail-label">The project</p>
+    <div>
+      <h2>Why we're building LabGenie</h2>
+      <p class="lede">Viewing lab results is one of the most-used features of online patient portals. It's also one of the most confusing.</p>
+      <p>Portals give people direct access to their test results, doctors' notes, and medication lists. That access is valuable, and the people with the most to gain are older adults managing several conditions at once. But results usually arrive as clinical shorthand: reference ranges, flags, and abbreviations, with little explanation. Older adults with limited health literacy or less experience with technology run into the most trouble making sense of them.</p>
+      <p>LabGenie is a web-based tool built to close that gap. It shows results visually, explains them in plain language, and suggests questions tailored to a person's own health information, so they arrive at an appointment prepared rather than puzzled.</p>
+      <p>The project is led by researchers at Florida State University and built through a user-centered process. That's what these sessions are: nothing gets finalized without feedback from the people who'll actually use it.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     TEAM:  from the existing LabGenie project site
+     TODO: confirm whether to show the full roster or link to the existing page
+     ========================================================================== -->
+<section class="band" id="team">
+  <div class="wrap rail">
+    <p class="rail-label">The team</p>
+    <div>
+      <h2>Who's behind this</h2>
+      <p class="lede">A project of the School of Information at Florida State University, with collaborators across medicine, nursing, social work, and computer science.</p>
+
+      <div class="group">
+        <p class="group-label">Project co-leads</p>
+        <ul class="people">
+          <li><span class="p-name">Zhe He, Ph.D.</span><span class="p-role">Contact PI &middot; Data Science Lead</span>
+            <span class="p-affil">Professor, School of Information; Director, Institute for Successful Longevity, Florida State University</span></li>
+          <li><span class="p-name">Mia Lustria, Ph.D.</span><span class="p-role">MPI &middot; Human Factors Lead</span>
+            <span class="p-affil">Professor, School of Information, Florida State University</span></li>
+        </ul>
+      </div>
+
+      <div class="group">
+        <p class="group-label">Co-investigators</p>
+        <ul class="people">
+          <li><span class="p-name">Zhan Zhang, Ph.D.</span><span class="p-role">User-Centered Design</span>
+            <span class="p-affil">Associate Professor, Pace University</span></li>
+          <li><span class="p-name">Xiao Luo, Ph.D.</span><span class="p-role">Natural Language Processing</span>
+            <span class="p-affil">Associate Professor, Computer Science, Southern Methodist University</span></li>
+          <li><span class="p-name">Michael Killian, Ph.D., M.S.W.</span><span class="p-role">Analysis &amp; Measurement</span>
+            <span class="p-affil">Associate Professor, College of Social Work, Florida State University</span></li>
+          <li><span class="p-name">Henna Budhwani, Ph.D., M.P.H.</span><span class="p-role">Implementation Science</span>
+            <span class="p-affil">Professor, College of Nursing, Florida State University</span></li>
+        </ul>
+      </div>
+
+      <div class="group">
+        <p class="group-label">Medical expert consultants</p>
+        <ul class="people">
+          <li><span class="p-name">Karim Hanna, M.D.</span><span class="p-role">Family Medicine</span>
+            <span class="p-affil">Program Director, Family Medicine, University of South Florida</span></li>
+          <li><span class="p-name">Lisa Granville, M.D.</span><span class="p-role">Geriatric Medicine</span>
+            <span class="p-affil">Professor and Interim Chair, Geriatrics, College of Medicine, Florida State University</span></li>
+        </ul>
+      </div>
+
+      <div class="group">
+        <p class="group-label">Development &amp; research</p>
+        <ul class="people">
+          <li><span class="p-name">Balu Bhasuran, Ph.D.</span><span class="p-role">Postdoctoral Scholar</span>
+            <span class="p-affil">School of Information, Florida State University</span></li>
+          <li><span class="p-name">Dhruv Kale</span><span class="p-role">Application Developer</span>
+            <span class="p-affil">School of Information, Florida State University</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     FUNDING
+     ========================================================================== -->
+<section class="band band-wash" id="funding">
+  <div class="wrap rail">
+    <p class="rail-label">Funding</p>
+    <div>
+      <h2>Supported by</h2>
+      <ul class="grants">
+        <li>
+          <h3>LabGenie: A Patient-Engagement Tool to Aid Older Adults' Understanding of Lab Test Results</h3>
+          <p>Agency for Healthcare Research and Quality &middot; R21/R33 (R21HS029969)<em>MPI: Zhe He (contact) and Mia Lustria &middot; 2024&ndash;2029</em></p>
+        </li>
+        <li>
+          <h3>Developing a Multi-Agent AI System for Explaining Lab Results to Older Adults</h3>
+          <p>National Institute on Aging / University of Pennsylvania &middot; A2 Pilot Grant (P30)<em>PI: Zhe He &middot; 2025&ndash;2026</em></p>
+        </li>
+        <li>
+          <h3>Towards an AI-Assisted Application for Lab Result Comprehension for Older Adults with Multiple Chronic Conditions</h3>
+          <p>FSU Institute for Successful Longevity &middot; Planning Grant<em>PI: Zhe He &middot; 2022&ndash;2024</em></p>
+        </li>
+      </ul>
+      <p class="partner-line">In partnership with Tallahassee Memorial HealthCare, One Cow Standing, and the OneFlorida+ Clinical Research Consortium.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     QUESTIONS
+     ⚠ These answers make public commitments about what participants will and
+     won't be asked to do. Each must match the approved protocol and consent
+     form. Clear changes with Dr. He.
+     ========================================================================== -->
+<section class="band" id="questions">
+  <div class="wrap rail">
+    <p class="rail-label">Questions</p>
+    <div>
+      <h2>Questions people ask</h2>
+      <div class="faq">
+        <details>
+          <summary>Do I need to be good with computers?</summary>
+          <div class="faq-body"><p>No. If computers aren't your strong suit, your feedback is especially valuable, because we can't learn where a tool is confusing from people who never get confused. You do need a computer or tablet with a camera and microphone, and we'll help you get onto the video call.</p></div>
+        </details>
+        <details>
+          <summary>Will I have to share my own medical records?</summary>
+          <div class="faq-body"><p>No. The session uses made-up lab results for a fictional patient. You will never be asked to bring, upload, or discuss your own test results, and nothing you see should be used to make decisions about your own health.</p></div>
+        </details>
+        <details>
+          <summary>Is this a medical appointment? Will I get medical advice?</summary>
+          <div class="faq-body"><p>No. This is a research session about the design of a tool. Nobody will examine you, review your health, or give you medical advice. LabGenie is not a substitute for talking with your doctor.</p></div>
+        </details>
+        <details>
+          <summary>Why do you need my camera on?</summary>
+          <div class="faq-body"><p>Seeing your face helps us understand where you're hesitating or looking puzzled, which is exactly the information we need to improve the design. With your permission we record the session for the research team's use. It is never shared publicly.</p></div>
+        </details>
+        <details>
+          <summary>What happens to my information if I sign up?</summary>
+          <!-- TODO: confirm retention and re-contact wording matches the consent form -->
+          <div class="faq-body"><p>Your contact details are used by the research team to reach you about this study and, if you agree, about future studies you might be interested in. They are stored securely and are never sold or used for marketing. You can ask us to remove your information at any time.</p></div>
+        </details>
+        <details>
+          <summary>Am I committing to anything by signing up?</summary>
+          <div class="faq-body"><p>No. Signing up means we may contact you about scheduling. You can decline, change your mind, or stop partway through a session at any point, for any reason, without giving an explanation.</p></div>
+        </details>
+        <details>
+          <summary>I took part last year. Can I do it again?</summary>
+          <div class="faq-body"><p>Please get in touch and we'll let you know. Sessions are small and we try to hear from a mix of people across rounds, so it depends on where we are in the schedule.</p></div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     CONTACT: institutional contacts only.
+     Phone number is the study line printed on the 2025 flyer.
+     ========================================================================== -->
+<section class="band band-wash" id="contact">
+  <div class="wrap rail">
+    <p class="rail-label">Contact</p>
+    <div>
+      <h2>Questions before you sign up?</h2>
+      <div class="contact-grid">
+        <div><h3>Study inquiries</h3>
+          <p>Zhe He, Ph.D.<br>Contact Principal Investigator<br><a href="mailto:zhe@fsu.edu">zhe@fsu.edu</a></p></div>
+        <div><h3>Session design</h3>
+          <p>Mia Lustria, Ph.D.<br>Multiple Principal Investigator<br><a href="mailto:mlustria@fsu.edu">mlustria@fsu.edu</a></p></div>
+        <div><h3>Institute for Successful Longevity</h3>
+          <p>Florida State University<br>Tallahassee, Florida<br><a href="https://isl.fsu.edu">isl.fsu.edu</a></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+
+<!-- ==========================================================================
+     FOOTER
+     ⚠ TODO: IRB LINE, intentionally commented out. Protocol V4 was submitted
+     23 Jul 2026; FSU IRB meets 12 Aug 2026. Do NOT claim approval for this
+     protocol until granted, and use the study ID covering THIS protocol.
+     STUDY00004785 covered the previous in-person workshop protocol.
+
+       <p>This study has been approved by the Florida State University
+          Institutional Review Board (Study ID: TODO).</p>
+     ========================================================================== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <img class="mark" src="assets/labgenie-icon.png" alt="">
+        <img class="word" src="assets/labgenie-wordmark-light.png" alt="LabGenie">
+      </div>
+      <a class="cta cta-light" href="https://fsu.qualtrics.com/jfe/form/SV_dakGUlBBSWSIS0e">Sign up to take part</a>
+    </div>
+    <p>LabGenie is a research project of the School of Information, College of Communication &amp; Information, Florida State University, in collaboration with Pace University. Funded by the Agency for Healthcare Research and Quality and the National Institute on Aging.</p>
+    <p class="colophon">&copy; 2026 Florida State University. LabGenie is a research tool under development. It is not a medical device and does not provide medical advice, diagnosis, or treatment.</p>
+  </div>
+</footer>
+
+
+<!-- ==========================================================================
+     JAVASCRIPT: decorative and progressive. Page works fully without it.
+     ========================================================================== -->
+<script>
+(function(){
+
+  /* ---- Result card view toggle ----
+     Runs regardless of motion preference: it's function, not decoration. */
+  var tabs = [
+    {btn: document.getElementById('tab-portal'), panel: document.getElementById('view-portal')},
+    {btn: document.getElementById('tab-genie'),  panel: document.getElementById('view-genie')}
+  ];
+  function select(i){
+    tabs.forEach(function(t, n){
+      var on = (n === i);
+      t.btn.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.panel.hidden = !on;
+    });
+  }
+  tabs.forEach(function(t, i){
+    if (!t.btn) return;
+    t.btn.addEventListener('click', function(){ select(i); });
+    // Left/right arrow keys move between tabs, as expected for a tablist
+    t.btn.addEventListener('keydown', function(e){
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      var next = (i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
+      select(next); tabs[next].btn.focus();
+    });
+  });
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  /* ---- Scroll reveals ---- */
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+    });
+  }, {rootMargin:'0px 0px -8% 0px'});
+
+  document.querySelectorAll('.rail > div > *, .hero-grid > *').forEach(function(el, i){
+    el.classList.add('rise');
+    el.style.transitionDelay = Math.min(i, 4) * 60 + 'ms';
+    obs.observe(el);
+  });
+
+  /* ---- Active nav link ---- */
+  var links = Array.prototype.slice.call(document.querySelectorAll('.nav a'));
+  var navObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (!e.isIntersecting) return;
+      links.forEach(function(a){
+        a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id);
+      });
+    });
+  }, {rootMargin:'-45% 0px -50% 0px'});
+  document.querySelectorAll('main section[id]').forEach(function(s){ navObs.observe(s); });
+})();
+</script>
+
+</body>
+</html>
