@@ -1,0 +1,337 @@
+/* ==========================================================================
+   LabGenie Volunteer Registry: shared stylesheet
+   Used by index.html and faq.html.
+
+   Structure of this file:
+     1.  Tokens          colours, type, spacing
+     2.  Base            resets, links, focus, containers
+     3.  Buttons         the "Join the Registry" call to action
+     4.  Masthead        top bar and navigation
+     5.  Hero
+     6.  Result card     the portal / LabGenie example on the home page
+     7.  Rail sections   two-column layout used by every content section
+     8.  Components      activity table, steps, quick questions, credibility
+     9.  FAQ page        grouped question list
+     10. Footer
+     11. Motion          scroll reveals and reduced-motion handling
+
+   Body text is deliberately large (1.15rem) and buttons are at least 56px
+   tall. The audience is adults 60 and over, some with low vision. Please
+   don't shrink either.
+   ========================================================================== */
+
+/* -- 1. Tokens ------------------------------------------------------------ */
+:root{
+  --ink:#0E2136;
+  --ink-mid:#3E556F;
+  --ink-soft:#6E8298;
+  --paper:#FFFFFF;
+  --wash:#F3F7FC;
+  --line:#DCE6F1;
+  --line-soft:#EBF1F8;
+
+  --blue:#1878C8;          /* logo mid blue */
+  --blue-deep:#12588F;
+  --blue-ink:#1D4B8F;      /* logo deep blue */
+  --blue-wash:#E8F3FD;
+
+  /* Severity colours for the example result card */
+  --sev-low:#D2334E;
+  --sev-normal:#3E9A4B;
+  --sev-high:#F4D06F;
+
+  --rail:13rem;
+  --measure:36rem;
+  --head:"Archivo",system-ui,sans-serif;
+  --body:"Public Sans",system-ui,-apple-system,sans-serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+
+/* -- 2. Base -------------------------------------------------------------- */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--body);font-size:1.15rem;line-height:1.62;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--blue-deep);text-underline-offset:.2em}
+a:focus-visible,button:focus-visible,summary:focus-visible{
+  outline:3px solid var(--blue);outline-offset:3px;border-radius:3px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:#fff;
+  padding:.75rem 1.25rem;z-index:200}
+.skip:focus{left:0}
+.wrap{width:min(76rem,calc(100% - 3rem));margin-inline:auto}
+
+h2{font-family:var(--head);font-weight:700;
+  font-size:clamp(1.7rem,3vw,2.35rem);line-height:1.16;letter-spacing:-.025em;
+  margin:0 0 1.2rem;max-width:22ch}
+h3{font-family:var(--head);font-weight:600;font-size:1.2rem;letter-spacing:-.012em;
+  line-height:1.3;margin:0 0 .4rem}
+p{margin:0 0 1.1rem;max-width:var(--measure)}
+.lede{font-size:1.2rem;color:var(--ink-mid)}
+
+/* Plain bullet list used in prose sections */
+.ticks{list-style:none;margin:0 0 1.3rem;padding:0;display:grid;gap:.6rem;max-width:var(--measure)}
+.ticks li{display:grid;grid-template-columns:1.6rem 1fr;gap:.7rem;align-items:start}
+.ticks svg{width:1.2rem;height:1.2rem;color:var(--blue);margin-top:.28rem}
+
+.morelink{display:inline-flex;align-items:center;gap:.4rem;
+  font-family:var(--head);font-weight:600;font-size:1rem;text-decoration:none;
+  border-bottom:2px solid var(--blue-wash);padding-bottom:.15rem;
+  transition:border-color .2s var(--ease)}
+.morelink:hover{border-bottom-color:var(--blue)}
+
+/* -- 3. Join button ------------------------------------------------------- */
+.cta{display:inline-flex;align-items:center;justify-content:center;gap:.65rem;
+  background:var(--blue);color:#fff;text-decoration:none;
+  font-family:var(--head);font-size:1.1rem;font-weight:600;letter-spacing:-.005em;
+  padding:1rem 1.9rem;border-radius:3px;border:2px solid var(--blue);min-height:56px;
+  transition:background .2s var(--ease),border-color .2s var(--ease),box-shadow .2s var(--ease)}
+.cta:hover{background:var(--blue-deep);border-color:var(--blue-deep);
+  box-shadow:0 6px 20px -8px rgba(24,120,200,.7)}
+.cta svg{width:1.05em;height:1.05em;flex:none}
+.cta-sm{font-size:1rem;padding:.6rem 1.1rem;min-height:44px}
+.cta-light{background:#fff;color:var(--blue-deep);border-color:#fff}
+.cta-light:hover{background:var(--blue-wash);border-color:var(--blue-wash)}
+
+/* -- 4. Masthead ---------------------------------------------------------- */
+.masthead{border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,.95);backdrop-filter:saturate(160%) blur(10px)}
+.masthead .wrap{display:flex;align-items:center;justify-content:space-between;
+  gap:1.5rem;padding:.7rem 0}
+.brand{display:flex;align-items:center;gap:.55rem;text-decoration:none}
+.brand img.mark{height:34px;width:auto;display:block}
+.brand img.word{height:21px;width:auto;display:block}
+.nav-right{display:flex;align-items:center;gap:1.6rem;flex-wrap:wrap}
+.nav{display:flex;gap:1.4rem;flex-wrap:wrap}
+.nav a{font-family:var(--head);font-size:.95rem;font-weight:500;text-decoration:none;
+  color:var(--ink-soft);padding:.3rem 0;border-bottom:2px solid transparent;
+  transition:color .2s var(--ease),border-color .2s var(--ease)}
+.nav a:hover,.nav a.active{color:var(--blue-deep);border-bottom-color:var(--blue)}
+@media(max-width:66rem){
+  /* Static here, so the blur would cost paint work for no visual gain */
+  .masthead{position:static;background:var(--paper);backdrop-filter:none}
+  .masthead .wrap{flex-direction:column;align-items:flex-start;gap:.7rem}
+  .nav-right{width:100%;justify-content:space-between;gap:1rem}
+  .nav{gap:1rem}
+}
+
+/* -- 5. Hero -------------------------------------------------------------- */
+.hero{padding:4.5rem 0 3.75rem;border-bottom:1px solid var(--line);background:var(--wash)}
+.hero-inner{max-width:44rem}
+.tag{display:inline-block;font-family:var(--head);font-size:.78rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--blue-deep);
+  background:var(--paper);border:1px solid var(--line);
+  padding:.4rem .8rem;border-radius:3px;margin:0 0 1.5rem}
+h1{font-family:var(--head);font-weight:700;
+  font-size:clamp(2.1rem,4.2vw,3.3rem);line-height:1.1;letter-spacing:-.028em;
+  margin:0 0 1.35rem;max-width:20ch}
+h1 em{font-style:normal;color:var(--blue)}
+.standfirst{font-size:1.2rem;color:var(--ink-mid);max-width:46rem;margin:0 0 1.1rem}
+.hero-actions{display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap;margin-top:2rem}
+.hero-note{font-size:.98rem;color:var(--ink-soft);margin:0;max-width:30ch}
+@media(max-width:66rem){ .hero{padding:2.5rem 0 2.5rem} }
+
+/* -- 6. Result card ------------------------------------------------------- */
+.card{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--paper);
+  box-shadow:0 20px 50px -34px rgba(14,33,54,.55)}
+.card-bar{background:var(--ink);color:#fff;padding:.7rem 1.15rem;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.card-bar b{font-family:var(--head);font-size:.9rem;font-weight:600;letter-spacing:.02em}
+.card-body{padding:1.5rem 1.4rem}
+.res-name{font-family:var(--head);font-size:1.02rem;font-weight:600;
+  letter-spacing:.02em;color:var(--ink-soft);text-transform:uppercase;margin:0 0 .15rem}
+.res-plain{font-family:var(--head);font-size:1.3rem;font-weight:600;
+  letter-spacing:-.02em;margin:0 0 .9rem;line-height:1.25}
+.res-expl{font-size:1rem;color:var(--ink-mid);margin:0 0 1.6rem}
+
+.scale{margin:0 0 1.5rem}
+.scale-head{text-align:center;margin:0 0 .3rem}
+.scale-head span{display:block;font-size:.85rem;color:var(--ink-soft)}
+.scale-head b{font-family:var(--head);font-size:1.15rem;font-weight:700;letter-spacing:-.01em}
+.scale-pin{position:relative;height:.55rem}
+.scale-pin i{position:absolute;top:0;transform:translateX(-50%);
+  width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;
+  border-top:8px solid var(--ink)}
+.scale-track{display:flex;height:22px;border-radius:11px;overflow:hidden}
+.scale-track span{display:block;height:100%}
+.scale-labels{display:flex;margin-top:.4rem}
+.scale-labels span{font-family:var(--head);font-size:.82rem;font-weight:600;
+  text-align:center;line-height:1.2;padding:0 2px}
+.scale-nums{position:relative;height:1.15rem;margin-top:.1rem}
+.scale-nums i{position:absolute;transform:translateX(-50%);
+  font-size:.8rem;color:var(--ink-soft);font-style:normal;font-variant-numeric:tabular-nums}
+@media(max-width:34rem){
+  .scale-labels span{font-size:.68rem;letter-spacing:-.01em}
+  .scale-nums i{font-size:.72rem}
+}
+
+.res-ask{background:var(--blue-wash);border-left:3px solid var(--blue);padding:.95rem 1.1rem}
+.res-ask b{display:block;font-family:var(--head);font-size:.75rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--blue-deep);margin-bottom:.4rem}
+.res-ask p{margin:0;font-size:1rem}
+.card-note{font-size:.85rem;color:var(--ink-soft);margin:.8rem 0 0;text-align:center}
+
+/* Toggle between the raw portal view and the LabGenie view */
+.switch{display:inline-flex;padding:3px;background:rgba(255,255,255,.12);border-radius:4px;gap:2px}
+.switch button{appearance:none;border:0;cursor:pointer;background:transparent;color:#A9C2DB;
+  font-family:var(--head);font-size:.82rem;font-weight:600;letter-spacing:.02em;
+  padding:.35rem .75rem;border-radius:3px;
+  transition:background .2s var(--ease),color .2s var(--ease)}
+.switch button[aria-selected="true"]{background:#fff;color:var(--ink)}
+.switch button:hover:not([aria-selected="true"]){color:#fff}
+@media(max-width:34rem){
+  .card-bar{flex-wrap:wrap;gap:.6rem;padding:.75rem .9rem}
+  .switch{width:100%}
+  .switch button{flex:1;padding:.55rem .5rem;min-height:40px}
+  .card-body{padding:1.25rem 1.05rem}
+}
+.view[hidden]{display:none}
+.portal-rows{border:1px solid var(--line);border-radius:4px;overflow:hidden;margin:0 0 1.1rem}
+.portal-rows div{display:flex;justify-content:space-between;gap:1rem;
+  padding:.7rem .9rem;border-bottom:1px solid var(--line-soft);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92rem}
+.portal-rows div:last-child{border-bottom:none}
+.portal-rows div:nth-child(odd){background:var(--wash)}
+.portal-rows dt{margin:0;color:var(--ink-soft)}
+.portal-rows dd{margin:0;font-weight:600}
+.flag{color:var(--sev-low);font-weight:700}
+.portal-quote{margin:0;padding:.95rem 1.1rem;background:var(--wash);
+  border-left:3px solid var(--line);font-style:italic;color:var(--ink-mid);font-size:1rem}
+
+/* -- 7. Rail sections ----------------------------------------------------- */
+.band{padding:4.25rem 0;border-bottom:1px solid var(--line)}
+.band-wash{background:var(--wash)}
+.band-ink{background:var(--ink);color:#DCE7F3;border-bottom:none}
+.band-ink h2{color:#fff}
+.band-ink p{color:#A9BDD4}
+.band-ink .rail-label{color:#7FB4E6;border-color:rgba(255,255,255,.25)}
+
+/* Brand blue band, used for the final call to action.
+   The footer is navy, so an ink-coloured CTA band merged straight into it and
+   read as one long dark block. Blue separates the two and makes the call to
+   action the loudest thing on the page, which is what it should be. */
+.band-blue{background:var(--blue);border-bottom:none;color:#E8F3FD}
+.band-blue h2{color:#fff}
+.band-blue p{color:#DCEBF9}
+.band-blue .rail-label{color:#fff;border-color:rgba(255,255,255,.5)}
+
+.rail{display:grid;grid-template-columns:var(--rail) 1fr;gap:3.5rem;align-items:start}
+.rail-label{position:sticky;top:5.5rem;
+  font-family:var(--head);font-size:.8rem;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--blue-deep);
+  border-top:2px solid var(--blue);padding-top:.75rem;margin:.4rem 0 0}
+@media(max-width:66rem){
+  .rail{grid-template-columns:1fr;gap:1.25rem}
+  .rail-label{position:static;top:auto}
+}
+
+/* Two-column split used where a section has prose beside an illustration */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+.split > *{min-width:0}
+@media(max-width:66rem){ .split{grid-template-columns:1fr;gap:2.25rem} }
+
+/* -- 8. Components -------------------------------------------------------- */
+
+/* Activity / typical time table */
+.activities{width:100%;border-collapse:collapse;margin:1.75rem 0 1.4rem;
+  border-top:1px solid var(--line)}
+.activities th{font-family:var(--head);font-size:.78rem;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);
+  text-align:left;padding:.7rem 0;border-bottom:1px solid var(--line)}
+.activities th:last-child,.activities td:last-child{text-align:right}
+.activities td{padding:.85rem 0;border-bottom:1px solid var(--line-soft);font-size:1.03rem}
+.activities td:first-child{font-family:var(--head);font-weight:600;letter-spacing:-.01em}
+.activities td:last-child{color:var(--ink-mid);white-space:nowrap;font-size:.98rem}
+@media(max-width:34rem){
+  .activities th:last-child,.activities td:last-child{font-size:.9rem}
+  .activities td{font-size:.98rem;padding:.7rem 0}
+}
+
+/* Numbered four-step process */
+.steps{counter-reset:s;list-style:none;margin:1.75rem 0 1.25rem;padding:0;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:1.25rem}
+.steps li{counter-increment:s;background:var(--paper);border:1px solid var(--line);
+  border-top:3px solid var(--blue);padding:1.35rem 1.3rem}
+.steps li::before{content:"Step " counter(s);display:block;
+  font-family:var(--head);font-size:.75rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--blue-deep);margin-bottom:.5rem}
+.steps p{margin:0;font-size:1.02rem;color:var(--ink-mid);max-width:none}
+
+/* Quick questions on the home page */
+.quickqs{display:grid;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));
+  gap:1.6rem 2.5rem;margin:1.75rem 0 1.5rem}
+.quickqs h3{font-size:1.08rem;margin-bottom:.3rem}
+.quickqs p{font-size:1rem;color:var(--ink-mid);margin:0;max-width:30rem}
+
+/* Credibility strip: funders and institution */
+.credit{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));
+  gap:1.5rem 2.5rem;margin-top:1.5rem}
+.credit h3{font-size:.78rem;font-family:var(--head);font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-soft);margin:0 0 .45rem}
+.credit p{margin:0;font-size:1rem;color:var(--ink-mid);max-width:26rem}
+
+/* Final call to action */
+.cta-band .rail{align-items:center}
+.cta-band h2{max-width:18ch}
+.cta-band .cta{margin-top:1.25rem}
+
+/* -- 9. FAQ page ---------------------------------------------------------- */
+.faqgroup{margin-top:2.5rem}
+.faqgroup:first-of-type{margin-top:1.5rem}
+.faqgroup > h2{font-size:clamp(1.35rem,2.2vw,1.7rem);margin-bottom:.9rem}
+.faq{border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;padding:1.35rem 2.75rem 1.35rem 0;
+  position:relative;font-family:var(--head);font-size:1.12rem;font-weight:600;
+  letter-spacing:-.015em;line-height:1.35;transition:color .2s var(--ease)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before,.faq summary::after{content:"";position:absolute;right:.4rem;
+  background:var(--blue);transition:transform .3s var(--ease),opacity .3s var(--ease)}
+.faq summary::before{top:2.05rem;width:15px;height:2px}
+.faq summary::after{top:2.05rem;right:.4rem;left:auto;width:15px;height:2px;
+  transform:rotate(90deg)}
+.faq details[open] summary::after{transform:rotate(0);opacity:0}
+.faq summary:hover{color:var(--blue-deep)}
+.faq-body{padding:0 2.75rem 1.4rem 0}
+.faq-body p{font-size:1.02rem;color:var(--ink-mid);margin:0 0 .8rem;max-width:44rem}
+.faq-body p:last-child{margin-bottom:0}
+@media(max-width:40rem){
+  .faq summary{padding:1.3rem 2.5rem 1.3rem 0;font-size:1.05rem}
+  .faq-body{padding:0 2.5rem 1.4rem 0}
+}
+
+/* -- 10. Footer ----------------------------------------------------------- */
+footer{background:var(--ink);color:#D6E1EE;padding:3.25rem 0 2.25rem;
+  border-top:1px solid rgba(255,255,255,.09)}
+footer p{color:#A2B3C9;font-size:.96rem;max-width:54rem}
+footer a{color:#fff}
+.foot-top{display:flex;justify-content:space-between;align-items:center;gap:2rem;
+  flex-wrap:wrap;padding-bottom:1.9rem;margin-bottom:1.9rem;
+  border-bottom:1px solid rgba(255,255,255,.16)}
+.foot-brand{display:flex;align-items:center;gap:.6rem}
+.foot-brand img.mark{height:38px;width:auto}
+.foot-brand img.word{height:22px;width:auto}
+.foot-nav{display:flex;gap:1.6rem;flex-wrap:wrap}
+.foot-nav a{font-family:var(--head);font-size:.95rem;font-weight:500;
+  color:#B7C8DC;text-decoration:none;border-bottom:2px solid transparent;
+  padding-bottom:.15rem;transition:color .2s var(--ease),border-color .2s var(--ease)}
+.foot-nav a:hover{color:#fff;border-bottom-color:var(--blue)}
+@media(max-width:40rem){
+  .foot-top{gap:1.4rem}
+  .foot-nav{gap:1.1rem}
+}
+.colophon{margin-top:1.5rem;font-size:.86rem;color:#7B8DA6}
+
+/* -- 11. Motion ----------------------------------------------------------- */
+.rise{opacity:0;transform:translateY(16px);
+  transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.rise.in{opacity:1;transform:none}
+@media(max-width:66rem){
+  .rise{transform:translateY(10px);
+    transition:opacity .35s var(--ease),transform .35s var(--ease)}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .rise{opacity:1!important;transform:none!important;transition:none!important}
+  *{transition-duration:.01ms!important}
+}
