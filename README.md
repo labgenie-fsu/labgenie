@@ -8,7 +8,6 @@ It is deliberately *not* about any single study. Individual studies are describe
 
 ---
 
-
 ## Repo contents
 
 ```
