@@ -4,6 +4,7 @@ Public recruitment website for the **LabGenie** project at Florida State Univers
 
 The site introduces LabGenie, explains what taking part in research involves, and guides visitors toward one action: **joining the LabGenie Volunteer Registry**.
 
+
 It is deliberately *not* about any single study. Individual studies are described when we contact a volunteer, not on this site. 
 
 ---
