@@ -1,5 +1,5 @@
 /* ==========================================================================
-   LabGenie Volunteer Registry: shared stylesheet
+   LabGenie Volunteer Registry — shared stylesheet
    Used by index.html and faq.html.
 
    Structure of this file:
@@ -92,6 +92,36 @@ p{margin:0 0 1.1rem;max-width:var(--measure)}
 .cta-sm{font-size:1rem;padding:.6rem 1.1rem;min-height:44px}
 .cta-light{background:#fff;color:var(--blue-deep);border-color:#fff}
 .cta-light:hover{background:var(--blue-wash);border-color:var(--blue-wash)}
+
+
+/* Coming-soon state for the sign-up buttons.
+   Used while the registry is closed pending IRB approval. These are <span>
+   elements rather than links, so they can't be clicked or tabbed to. Muted
+   and non-interactive so nobody sits there tapping a button that does
+   nothing. Remove the class and restore the <a> when the registry opens. */
+.cta-soon{
+  background:var(--wash);color:var(--ink-soft);border-color:var(--line);
+  cursor:default;box-shadow:none;
+}
+.cta-soon:hover{
+  background:var(--wash);border-color:var(--line);box-shadow:none;
+}
+/* On the blue band the muted grey would disappear, so use a translucent
+   white treatment there instead. */
+.band-blue .cta-soon,
+.cta-light.cta-soon{
+  background:rgba(255,255,255,.16);color:#EAF3FD;
+  border-color:rgba(255,255,255,.45);
+}
+.band-blue .cta-soon:hover,
+.cta-light.cta-soon:hover{
+  background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.45);
+}
+
+/* Short line under a closed call to action, pointing at the email fallback */
+.cta-alt{margin:1rem 0 0;font-size:1rem}
+.band-blue .cta-alt{color:#DCEBF9}
+.band-blue .cta-alt a{color:#fff}
 
 /* -- 4. Masthead ---------------------------------------------------------- */
 .masthead{border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100;
